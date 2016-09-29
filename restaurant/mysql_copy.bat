@@ -1,0 +1,1 @@
+d:\servers\xampp\mysql\bin\mysqldump -u root -d restaurant > migrations/dump.sql
