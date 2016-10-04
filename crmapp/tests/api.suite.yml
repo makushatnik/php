@@ -1,0 +1,13 @@
+class_name: ApiTester
+modules:
+    enabled:
+        - \Helper\Api
+        - PhpBrowser
+        - REST
+        - Db
+    config:
+        PhpBrowser:
+            'url': 'http://localhost'
+        REST:
+            depends: PhpBrowser
+            'url': 'http://localhost'

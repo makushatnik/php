@@ -1,0 +1,7 @@
+.audit-toggler {
+	cursor: pointer;
+}
+
+.audit-toggler:hover {
+	outline: 1px solid cyan;
+}
