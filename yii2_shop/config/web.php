@@ -12,7 +12,15 @@ $config = [
     'modules' => [
         'admin' => [
             'class' => 'app\modules\admin\Module',
-            'layout' => 'admin'
+            'layout' => 'admin',
+            'defaultRoute' => 'order/index'
+        ],
+        'yii2images' => [
+            'class' => 'rico\yii2images\Module',
+            'imagesStorePath' => 'upload/store',
+            'imagesCachePath' => 'upload/cache',
+            'graphicsLibrary' => 'GD',
+            'placeHolderPath' => '@webroot/upload/store/no-image.png',
         ],
     ],
     'components' => [
@@ -53,7 +61,6 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -65,7 +72,17 @@ $config = [
                 'search' => 'category/search',
             ],
         ],
-        
+    ],
+    'controllerMap' => [
+        'elfinder' => [
+            'class' => 'mihaildev\elfinder\PathController',
+            'access' => ['@'],
+            'root' => [
+                'baseUrl'=>'/web',
+                'path' => 'upload/global',
+                'name' => 'Global'
+            ],
+        ]
     ],
     'params' => $params,
 ];

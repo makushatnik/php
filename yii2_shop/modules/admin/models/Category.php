@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\admin\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -16,6 +16,14 @@ use yii\db\ActiveRecord;
  */
 class Category extends ActiveRecord
 {
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'category';
+    }
+
     /**
      * @inheritdoc
      */
@@ -36,25 +44,15 @@ class Category extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'parent_id' => 'Parent ID',
-            'name' => 'Name',
-            'keywords' => 'Keywords',
-            'description' => 'Description',
+            'id' => '№ категории',
+            'parent_id' => 'Родитель',
+            'name' => 'Название',
+            'keywords' => 'Ключевые слова',
+            'description' => 'Мета-описание',
         ];
     }
 
-    public function behaviors()
-    {
-        return [
-            'image' => [
-                'class' => 'rico\yii2images\behaviors\ImageBehave',
-            ]
-        ];
-    }
-    
-    public function getProducts()
-    {
-        return $this->hasMany(Product::className(), ['category_id' => 'id']);
+    public function getCategory() {
+        return $this->hasOne(Category::className(), ['id' => 'parent_id']);
     }
 }

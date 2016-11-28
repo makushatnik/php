@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\modules\admin\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -22,6 +22,16 @@ use yii\db\ActiveRecord;
  */
 class Product extends ActiveRecord
 {
+    public $image;
+    public $gallery;
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'product';
+    }
+
     /**
      * @inheritdoc
      */
@@ -37,6 +47,8 @@ class Product extends ActiveRecord
             [['description'], 'string', 'max' => 200],
             [['img'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['image'], 'file', 'extensions' => 'png, jpg'],
+            [['gallery'], 'file', 'extensions' => 'png, jpg', 'maxFiles' => 4],
         ];
     }
 
@@ -53,7 +65,8 @@ class Product extends ActiveRecord
             'price' => 'Цена',
             'keywords' => 'Ключевые слова',
             'description' => 'Мета-описание',
-            //'img' => 'Img',
+            'image' => 'Фото',
+            'gallery' => 'Галерея',
             'hit' => 'Хит',
             'new' => 'Новинка',
             'sale' => 'Распродажа',
@@ -72,5 +85,31 @@ class Product extends ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+
+    public function upload(){
+        if($this->validate()){
+            $path = 'upload/store/' . $this->image->baseName . '.' . $this->image->extension;
+            $this->image->saveAs($path);
+            $this->attachImage($path, true);
+            @unlink($path);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function uploadGallery(){
+        if($this->validate()){
+            foreach ($this->gallery as $file) {
+                $path = 'upload/store/' . $file->baseName . '.' . $this->image->extension;
+                $file->saveAs($path);
+                $this->attachImage($path);
+                @unlink($path);
+            }
+            return true;
+        }else{
+            return false;
+        }
     }
 }

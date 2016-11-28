@@ -7,7 +7,7 @@
  	});
 
  	function showCart(cart) {
- 		$('#cart .modal-body').html('cart');
+ 		$('#cart .modal-body').html(cart);
  		$('#cart').modal();
  	}
 
@@ -16,7 +16,7 @@
  			url: '/cart/show',
  			type: 'GET',
  			success: function(res) {
- 				if (!res) console.log('Error clearing cart!');
+ 				if (!res) console.log('Error retrieving cart!');
  				showCart(res);
  			},
  			error: function() {
@@ -56,7 +56,7 @@
  		});
  	}
 
- 	$('.add-to-cart').click(function(e) {
+ 	$('.add-to-cart').on('click', function(e) {
  		e.preventDefault();
  		var id = $(this).data('id'),
  			qty = $('#qty').val();
@@ -67,9 +67,10 @@
  			success: function(res) {
  				if (!res) console.log('Error receiving data!');
  				showCart(res);
+ 				//console.log(res);
  			},
- 			error: function() {
- 				alert('Error!');
+ 			error: function(err) {
+ 				alert('Error! ' + err);
  			}
  		});
  	});
