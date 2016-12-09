@@ -1,7 +1,7 @@
 <?php
 
 use yii\db\Migration;
-use app\models\user\UserRecord;
+use app\models\User;
 
 class m160929_145747_add_predefined_users extends Migration
 {
@@ -18,9 +18,8 @@ class m160929_145747_add_predefined_users extends Migration
     }
 
     protected function createUser($username, $password, $email) {
-        $user = new UserRecord();
+        $user = new User();
         $user->attributes = compact('username', 'password', 'email');
-        //$user->created_at = new Date();
         $user->save();
     }
 }

@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\user\UserRecord;
 
 class SiteController extends Controller
 {
@@ -75,8 +76,14 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->login()) {
+                return $this->goBack();
+            }
+            // else {
+            //     $user = UserRecord::findByUsername($model->username);
+            //     return 'HASH - '.crypt($model->password, $user->password);
+            // }
         }
         return $this->render('login', [
             'model' => $model,

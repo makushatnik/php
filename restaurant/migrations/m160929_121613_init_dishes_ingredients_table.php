@@ -9,10 +9,10 @@ class m160929_121613_init_dishes_ingredients_table extends Migration
         $this->createTable(
             'dishes_ingredients',
             [
-                'id' => 'pk',
                 'dish_id' => 'int not null',
                 'ingredient_id' => 'int not null',
-                'quantity' => 'int'
+                'quantity' => 'int default 1',
+                'measure' => 'string'
             ],
             'ENGINE=InnoDB'
         );

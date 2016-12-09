@@ -12,6 +12,8 @@ class m160929_121244_init_dishes_table extends Migration
                 'id' => 'pk',
                 'name' => 'string',
                 'notes' => 'text',
+                'hidden' => 'bool DEFAULT 0',
+                'img_url' => 'string'
             ],
             'ENGINE=InnoDB'
         );

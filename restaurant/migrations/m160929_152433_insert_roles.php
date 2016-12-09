@@ -1,7 +1,7 @@
 <?php
 
 use yii\db\Migration;
-use app\models\user\UserRecord;
+use app\models\User;
 
 class m160929_152433_insert_roles extends Migration
 {
@@ -18,7 +18,7 @@ class m160929_152433_insert_roles extends Migration
     private function assignRole($user, $username) {
         $this->rbac->assign(
             $user,
-            UserRecord::findOne(['username' => $username])->id
+            User::findOne(['username' => $username])->id
         );
     }
 

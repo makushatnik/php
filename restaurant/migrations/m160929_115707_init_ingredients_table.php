@@ -12,7 +12,8 @@ class m160929_115707_init_ingredients_table extends Migration
                 'id' => 'pk',
                 'name' => 'string',
                 'notes' => 'text',
-                'hidden' => 'bool'
+                'hidden' => 'bool DEFAULT 0',
+                'img_url' => 'string'
             ],
             'ENGINE=InnoDB'
         );

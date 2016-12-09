@@ -9,7 +9,14 @@ $config = [
     'modules' => [
         'admin' => [
             'class' => 'app\modules\admin\AdminModule',
-        ]
+            'layout' => 'admin'
+        ],
+        'yii2images' => [
+            'class' => 'rico\yii2images\Module',
+            'imagesStorePath' => 'upload/store',
+            'imagesCachePath' => 'upload/cache',
+            'graphicsLibrary' => 'GD',
+        ],
     ],
     'components' => [
         'request' => [
@@ -20,7 +27,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\user\UserRecord',
+            'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -59,7 +66,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'admin/' => 'admin/site/index',
+                'admin' => 'admin/default',
+                '<action>' => 'site/<action>',
             ],
         ],
         'authManager' => [

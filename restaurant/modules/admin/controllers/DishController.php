@@ -3,16 +3,18 @@
 namespace app\modules\admin\controllers;
 
 use Yii;
-use app\models\User;
+use app\models\dishes\Dish;
+use app\models\dishes\DishSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\UploadedFile;
 
 /**
- * UserController implements the CRUD actions for UserRecord model.
+ * DishController implements the CRUD actions for Dish model.
  */
-class UsersController extends Controller
+class DishController extends Controller
 {
     /**
      * @inheritdoc
@@ -39,45 +41,47 @@ class UsersController extends Controller
     }
 
     /**
-     * Lists all UserRecord models.
+     * Lists all Dish models.
      * @return mixed
      */
     public function actionIndex()
     {
-        // $searchModel = new UserSearchModel();
-        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new DishSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        // return $this->render('index', [
-        //     'searchModel' => $searchModel,
-        //     'dataProvider' => $dataProvider,
-        // ]);
-        $users = User::find();
-        return $this->render('index', compact('users'));
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
-     * Displays a single UserRecord model.
+     * Displays a single Dish model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+        $image = $model->getImage();
+        return $this->render('view', compact('model', 'image'));
     }
 
     /**
-     * Creates a new UserRecord model.
+     * Creates a new Dish model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new User();
+        $model = new Dish();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->imageFile) {
+                $model->upload();
+            }
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -86,7 +90,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Updates an existing UserRecord model.
+     * Updates an existing Dish model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,7 +100,11 @@ class UsersController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->imageFile) {
+                $model->upload();
+            }
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -105,7 +113,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Deletes an existing UserRecord model.
+     * Deletes an existing Dish model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -118,18 +126,18 @@ class UsersController extends Controller
     }
 
     /**
-     * Finds the UserRecord model based on its primary key value.
+     * Finds the Dish model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return UserRecord the loaded model
+     * @return Dish the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne($id)) !== null) {
+        if (($model = Dish::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('The requested dish does not exist.');
         }
     }
 }
