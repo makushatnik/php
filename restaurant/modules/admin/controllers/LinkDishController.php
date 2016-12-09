@@ -48,35 +48,33 @@ class LinkDishController extends Controller
     public function actionIndex()
     {
         $query = (new Query());
-        //$dishes = Dish::find(['hidden' => 0]);
         $tmp = $query
         	->select('*')
         	->from('dishes')
-        	->where('hidden = 0')->all();
-        //debug($ids);
-        $ids = [];
-        foreach ($tmp as $dish) {
-        	array_push($ids, $dish['id']);
-        }
-        //debug($ids);
+        	->where('hidden = 0')
+            ->all();
+        
+        $ids = array_map(function($x) {
+            return $x['id'];
+        }, $tmp);
+        
         $query = (new Query());
         $linkDishes = $query
         	->select('i.name, i.hidden, d.quantity, d.measure, d.dish_id')
         	->from(['d' => 'dishes_ingredients', 'i' => 'ingredients'])
         	->where(['in', 'dish_id', $ids])
-        	->andWhere('i.id = d.ingredient_id')->all();
+        	->andWhere('i.id = d.ingredient_id')
+            ->all();
         $dishes = [];
-        //debug($tmp);
+        
         foreach ($tmp as $dish) {
             $hidden = 0;
             $haveItems = 0;
-            //debug($dish['id']);
+            
             foreach ($linkDishes as $row) {
-                //echo 'Question - '.($dish['id'] == $row['dish_id']).'<br>';
                 if ($dish['id'] == $row['dish_id']) {
                     $haveItems = 1;
                     if ($row['hidden'] == 1) {
-                        echo 'We Are Here<br>';
                         $hidden = 1;
                         break;
                     }
@@ -86,7 +84,6 @@ class LinkDishController extends Controller
                 array_push($dishes, $dish);
             }
         }
-        //debug($linkDishes);
 
         return $this->render('index', compact('dishes','linkDishes'));
     }

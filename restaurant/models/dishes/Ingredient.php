@@ -37,6 +37,7 @@ class Ingredient extends ActiveRecord
             [['hidden'], 'integer'],
             [['name', 'img_url'], 'string', 'max' => 255],
             [['imageFile'], 'file', 'extensions' => 'png, jpg'],
+            [['name'], 'string', 'min' => 3]
         ];
     }
 

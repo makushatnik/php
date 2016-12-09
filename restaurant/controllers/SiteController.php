@@ -8,7 +8,9 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use app\models\user\UserRecord;
+use app\models\RegisterForm;
+use app\models\User;
+use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
@@ -20,10 +22,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['profile','logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['profile','logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -64,6 +66,15 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+    public function actionProfile($id)
+    {
+        $user = User::findOne($id);
+        if (!$user) {
+            throw new NotFoundHttpException('The requested user does not exist.');
+        }
+        return $this->render('profile', compact('user'));
+    }
+
     /**
      * Login action.
      *
@@ -90,6 +101,23 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionRegister()
+    {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new RegisterForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->register()) {
+                return $this->goBack();
+            }
+        }
+
+        return $this->render('register', [
+            'model' => $model,
+        ]);
+    }
     /**
      * Logout action.
      *

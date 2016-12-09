@@ -33,9 +33,13 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['password', 'email'], 'required'],
-            [['created_at'], 'integer'],
-            [['username', 'password', 'email', 'auth_key'], 'string', 'max' => 255],
-            [['username'], 'unique'],
+            ['created_at', 'integer'],
+            [['auth_key'], 'string', 'max' => 60],
+            ['username', 'unique'],
+            [['email'], 'string', 'max' => 30],
+            [['username', 'password'], 'string', 'max' => 20],
+            [['password'], 'string', 'min' => 4],
+            ['email', 'email']
         ];
     }
 
@@ -97,5 +101,12 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findByUsername($username) {
         return static::find()->where(['username' => $username])->one();
+    }
+
+    public function load($form)
+    {
+        $this->username = $form->username;
+        $this->email = $form->email;
+        $this->password = $form->password;
     }
 }

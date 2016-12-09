@@ -1,8 +1,11 @@
 <?php
 
+use yii\helpers\Html;
 /* @var $this yii\web\View */
 
 $this->title = 'My Yii Application';
+$btnClass = 'btn btn-lg ';
+$btnClass .= (date('s')%2) ? 'btn-warning' : 'btn-success';
 ?>
 <div class="site-index">
 
@@ -11,7 +14,7 @@ $this->title = 'My Yii Application';
 
         <p class="lead">You can manage your dishes here and purchase it.</p>
 
-        <p><a class="btn btn-lg btn-success" href="/dishes/">Get started with Creative Restaurant</a></p>
+        <p><?= Html::a('Get started with Creative Restaurant', '/dish', ['class' => $btnClass]) ?></p>
     </div>
 
     <div class="body-content">

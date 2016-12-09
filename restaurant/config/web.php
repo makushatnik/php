@@ -33,6 +33,9 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        // 'security' => [
+        //     'passwordHashStrategy' => 'password_hash'
+        // ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'useFileTransport' => false,
@@ -67,7 +70,8 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'admin' => 'admin/default',
-                '<action>' => 'site/<action>',
+                '/profile/<id:[\d-]+>' => 'site/profile',
+                '<action:(login|logout|about|register|contact|index)>' => 'site/<action>',
             ],
         ],
         'authManager' => [
